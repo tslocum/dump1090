@@ -41,21 +41,6 @@ void sigintHandler(int dummy) {
 /* ============================ Terminal handling  ========================== */
 
 
-/* Get the number of rows after the terminal changes size. */
-int getTermRows() {
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    return w.ws_row;
-}
-
-/* Handle resizing terminal. */
-void sigWinchCallback() {
-    signal(SIGWINCH, SIG_IGN);
-    Modes.interactive_rows = getTermRows();
-    interactiveShowData();
-    signal(SIGWINCH, sigWinchCallback);
-}
-
 //
 // =============================== Terminal handling ========================
 //
@@ -77,6 +62,7 @@ void sigWinchCallback() {
 #else 
 int getTermRows() { return MODES_INTERACTIVE_ROWS;}
 #endif
+
 //
 // =============================== Initialization ===========================
 //
