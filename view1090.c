@@ -99,14 +99,14 @@ void view1090Init(void) {
 #endif
 
     // Allocate the various buffers used by Modes
-    if ( NULL == (Modes.icao_cache = (uint32_t *) malloc(sizeof(uint32_t) * MODES_ICAO_CACHE_LEN * 2)))
+    if ( NULL == (Modes.icao_cache = (uint32_t *) malloc(sizeof(uint32_t) * Modes.icao_cache_len * 2)))
     {
         fprintf(stderr, "Out of memory allocating data buffer.\n");
         exit(1);
     }
 
     // Clear the buffers that have just been allocated, just in-case
-    memset(Modes.icao_cache, 0,   sizeof(uint32_t) * MODES_ICAO_CACHE_LEN * 2);
+    memset(Modes.icao_cache, 0,   sizeof(uint32_t) * Modes.icao_cache_len * 2);
 
     // Validate the users Lat/Lon home location inputs
     if ( (Modes.fUserLat >   90.0)  // Latitude must be -90 to +90

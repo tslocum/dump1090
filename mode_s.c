@@ -591,7 +591,7 @@ void testAndTimeBitCorrection() {
 */
 //=========================================================================
 //
-// Hash the ICAO address to index our cache of MODES_ICAO_CACHE_LEN
+// Hash the ICAO address to index our cache of Modes.icao_cache_len
 // elements, that is assumed to be a power of two
 //
 uint32_t ICAOCacheHashAddress(uint32_t a) {
@@ -600,14 +600,14 @@ uint32_t ICAOCacheHashAddress(uint32_t a) {
     a = ((a >> 16) ^ a) * 0x45d9f3b;
     a = ((a >> 16) ^ a) * 0x45d9f3b;
     a = ((a >> 16) ^ a);
-    return a & (MODES_ICAO_CACHE_LEN-1);
+    return a & (Modes.icao_cache_len-1);
 }
 //
 //=========================================================================
 //
 // Add the specified entry to the cache of recently seen ICAO addresses.
 // Note that we also add a timestamp so that we can make sure that the
-// entry is only valid for MODES_ICAO_CACHE_TTL seconds.
+// entry is only valid for Modes.icao_cache_ttl seconds.
 //
 void addRecentlySeenICAOAddr(uint32_t addr) {
     uint32_t h = ICAOCacheHashAddress(addr);
@@ -618,7 +618,7 @@ void addRecentlySeenICAOAddr(uint32_t addr) {
 //=========================================================================
 //
 // Returns 1 if the specified ICAO address was seen in a DF format with
-// proper checksum (not xored with address) no more than * MODES_ICAO_CACHE_TTL
+// proper checksum (not xored with address) no more than * Modes.icao_cache_ttl
 // seconds ago. Otherwise returns 0.
 //
 int ICAOAddressWasRecentlySeen(uint32_t addr) {
@@ -627,7 +627,7 @@ int ICAOAddressWasRecentlySeen(uint32_t addr) {
     uint32_t t = Modes.icao_cache[h*2+1];
     uint64_t tn = time(NULL);
 
-    return ( (a) && (a == addr) && ( (tn - t) <= MODES_ICAO_CACHE_TTL) );
+    return ( (a) && (a == addr) && ( (tn - t) <= Modes.icao_cache_ttl) );
 }
 //
 //=========================================================================
