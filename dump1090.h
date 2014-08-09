@@ -318,6 +318,10 @@ struct {                             // Internal state
     int   mlat;                      // Use Beast ascii format for raw data output, i.e. @...; iso *...;
     int   interactive_rtl1090;       // flight table in interactive mode is formatted like RTL1090
 
+    // ICAO cache
+    int   icao_cache_len;            // Length of ICAO cache
+    unsigned int   icao_cache_ttl;   // TTL of ICAO cache
+
     // User details
     double fUserLat;                // Users receiver/antenna lat/lon needed for initial surface location
     double fUserLon;                // Users receiver/antenna lat/lon needed for initial surface location

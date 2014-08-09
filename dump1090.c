@@ -77,6 +77,8 @@ void modesInitConfig(void) {
     Modes.net_output_beast_port   = MODES_NET_OUTPUT_BEAST_PORT;
     Modes.net_input_beast_port    = MODES_NET_INPUT_BEAST_PORT;
     Modes.net_http_port           = MODES_NET_HTTP_PORT;
+    Modes.icao_cache_len          = MODES_ICAO_CACHE_LEN;
+    Modes.icao_cache_ttl          = MODES_ICAO_CACHE_TTL;
     Modes.interactive_rows        = getTermRows();
     Modes.interactive_delete_ttl  = MODES_INTERACTIVE_DELETE_TTL;
     Modes.interactive_display_ttl = MODES_INTERACTIVE_DISPLAY_TTL;
@@ -94,7 +96,7 @@ void modesInit(void) {
     pthread_cond_init(&Modes.data_cond,NULL);
 
     // Allocate the various buffers used by Modes
-    if ( ((Modes.icao_cache = (uint32_t *) malloc(sizeof(uint32_t) * MODES_ICAO_CACHE_LEN * 2)                  ) == NULL) ||
+    if ( ((Modes.icao_cache = (uint32_t *) malloc(sizeof(uint32_t) * Modes.icao_cache_len * 2)                  ) == NULL) ||
          ((Modes.pFileData  = (uint16_t *) malloc(MODES_ASYNC_BUF_SIZE)                                         ) == NULL) ||
          ((Modes.magnitude  = (uint16_t *) malloc(MODES_ASYNC_BUF_SIZE+MODES_PREAMBLE_SIZE+MODES_LONG_MSG_SIZE) ) == NULL) ||
          ((Modes.maglut     = (uint16_t *) malloc(sizeof(uint16_t) * 256 * 256)                                 ) == NULL) ||
@@ -106,7 +108,7 @@ void modesInit(void) {
     }
 
     // Clear the buffers that have just been allocated, just in-case
-    memset(Modes.icao_cache, 0,   sizeof(uint32_t) * MODES_ICAO_CACHE_LEN * 2);
+    memset(Modes.icao_cache, 0,   sizeof(uint32_t) * Modes.icao_cache_len * 2);
     memset(Modes.pFileData,127,   MODES_ASYNC_BUF_SIZE);
     memset(Modes.magnitude,  0,   MODES_ASYNC_BUF_SIZE+MODES_PREAMBLE_SIZE+MODES_LONG_MSG_SIZE);
 
@@ -399,6 +401,8 @@ void showHelp(void) {
 "--gain <db>              Set gain (default: max gain. Use -10 for auto-gain)\n"
 "--enable-agc             Enable the Automatic Gain Control (default: off)\n"
 "--freq <hz>              Set frequency (default: 1090 Mhz)\n"
+"--icao-length <num>      Length of ICAO cache (default: 1024. Must be a power of 2)\n"
+"--icao-ttl <sec>         Remove from ICAO cache if idle for <sec> (default: 60)\n"
 "--ifile <filename>       Read data from file (use '-' for stdin)\n"
 "--interactive            Interactive mode refreshing data on screen\n"
 "--interactive-rows <num> Max number of rows in interactive mode (default: 15)\n"
@@ -636,6 +640,10 @@ int main(int argc, char **argv) {
             Modes.metric = 1;
         } else if (!strcmp(argv[j],"--aggressive")) {
             Modes.nfix_crc = MODES_MAX_BITERRORS;
+        } else if (!strcmp(argv[j],"--icao-length") && more) {
+            Modes.icao_cache_len = atoi(argv[++j]);
+        } else if (!strcmp(argv[j],"--icao-ttl") && more) {
+            Modes.icao_cache_ttl = atoi(argv[++j]);
         } else if (!strcmp(argv[j],"--interactive")) {
             Modes.interactive = 1;
         } else if (!strcmp(argv[j],"--interactive-rows") && more) {
