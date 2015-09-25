@@ -417,11 +417,15 @@ function initialize_map() {
 	var mapOptions = {
 		center: new google.maps.LatLng(CenterLat, CenterLon),
 		zoom: ZoomLvl,
+		zoomControl: true,
+		zoomControlOptions: {
+			style: google.maps.ZoomControlStyle.SMALL,
+			position: google.maps.ControlPosition.LEFT_BOTTOM
+		},
+		scaleControl: true,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		mapTypeControl: true,
 		streetViewControl: false,
-                zoomControl: true,
-                scaleControl: true,
 		mapTypeControlOptions: {
 			mapTypeIds: mapTypeIds,
 			position: google.maps.ControlPosition.TOP_LEFT,
